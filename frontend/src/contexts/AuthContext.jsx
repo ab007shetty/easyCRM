@@ -97,12 +97,23 @@ export function AuthProvider({ children }) {
     return data
   }
 
+  async function verifyOtp(email, token) {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'signup'
+    })
+    if (error) throw error
+    return data
+  }
+
   const value = {
     user,
     profile,
     loading,
     signInWithEmail,
     signUpWithEmail,
+    verifyOtp,
     signOut,
     updateProfile,
     refreshProfile: () => user && fetchProfile(user.id),

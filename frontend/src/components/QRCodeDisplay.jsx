@@ -216,13 +216,6 @@ export default function QRCodeDisplay({ referralCode, size = 200 }) {
           <Download className="w-4 h-4" />
           Download QR
         </button>
-        <button
-          onClick={handleCopy}
-          className="flex items-center gap-2 px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-sm font-medium cursor-pointer"
-        >
-          {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-          {copied ? 'Copied!' : 'Copy Link'}
-        </button>
       </div>
     </div>
   )

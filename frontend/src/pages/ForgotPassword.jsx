@@ -39,8 +39,8 @@ export default function ForgotPassword() {
         {/* Header/Logo */}
         <header className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-emerald-600/20 group-hover:bg-emerald-700 transition-colors">
-              <Zap className="w-6 h-6 text-white fill-white" />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-bold tracking-tight text-slate-900">
               easyCRM
@@ -131,8 +131,8 @@ export default function ForgotPassword() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-600/15 rounded-full blur-3xl -ml-20 -mb-20 pointer-events-none" />
         
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-emerald-500/25 backdrop-blur-md rounded-lg flex items-center justify-center border border-emerald-500/30">
-            <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain drop-shadow-md" />
           </div>
           <span className="text-sm font-bold tracking-wider uppercase text-emerald-300">
             Security & Support

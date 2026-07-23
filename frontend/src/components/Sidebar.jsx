@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom'
+import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import {
   LayoutDashboard,
@@ -23,6 +24,16 @@ export default function Sidebar({ isOpen, onClose }) {
   const { signOut, profile } = useAuth()
   const location = useLocation()
 
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
+
+  const handleSignOutClick = () => {
+    setShowLogoutModal(true)
+  }
+
+  const confirmSignOut = async () => {
+    await signOut()
+  }
+
   return (
     <>
       {/* Mobile overlay */}
@@ -45,11 +56,11 @@ export default function Sidebar({ isOpen, onClose }) {
       >
         {/* Logo */}
         <div className="flex items-center justify-between p-5 border-b border-slate-700/50">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/25">
-              <Zap className="w-5 h-5 text-white" />
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain" />
             </div>
-            <div>
+            <div className="flex flex-col">
               <h1 className="text-lg font-bold tracking-tight">easyCRM</h1>
               <p className="text-[10px] text-slate-400 -mt-0.5 font-medium uppercase tracking-wider">Lead Network</p>
             </div>
@@ -109,7 +120,7 @@ export default function Sidebar({ isOpen, onClose }) {
             </div>
           </div>
           <button
-            onClick={signOut}
+            onClick={handleSignOutClick}
             className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200"
           >
             <LogOut className="w-[18px] h-[18px]" />
@@ -117,6 +128,32 @@ export default function Sidebar({ isOpen, onClose }) {
           </button>
         </div>
       </aside>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl border border-slate-200 animate-scale-in">
+            <h3 className="text-lg font-bold text-slate-800 mb-2">Sign Out</h3>
+            <p className="text-sm text-slate-500 mb-6">
+              Are you sure you want to log out? You will need to sign in again to access your lead network.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmSignOut}
+                className="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/20 transition-colors"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

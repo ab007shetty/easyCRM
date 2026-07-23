@@ -145,7 +145,9 @@ export default function PublicLeadForm() {
             )}
           </p>
           <div className="mt-6 flex items-center justify-center gap-2 text-emerald-600">
-            <Zap className="w-4 h-4" />
+            <div className="w-4 h-4 flex items-center justify-center">
+              <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain filter grayscale" />
+            </div>
             <span className="text-sm font-medium">Powered by easyCRM</span>
           </div>
         </div>
@@ -158,8 +160,8 @@ export default function PublicLeadForm() {
       <div className="w-full max-w-md animate-fade-in">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/25">
-            <Zap className="w-8 h-8 text-white" />
+          <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+            <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain" />
           </div>
           {owner?.company_name ? (
             <>
@@ -278,7 +280,9 @@ export default function PublicLeadForm() {
         {/* Footer */}
         <div className="text-center mt-6">
           <div className="flex items-center justify-center gap-1.5 text-slate-400">
-            <Zap className="w-3.5 h-3.5" />
+            <div className="w-3.5 h-3.5 flex items-center justify-center">
+              <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain filter grayscale opacity-60" />
+            </div>
             <span className="text-xs font-medium">Powered by easyCRM</span>
           </div>
         </div>

@@ -45,13 +45,32 @@ export default function LeadDetail() {
       setEditData(data)
 
       // Fetch sub-leads
-      const { data: children } = await supabase
-        .from('leads')
-        .select('*')
-        .eq('parent_lead_id', leadId)
-        .order('created_at', { ascending: false })
+      let loadedSubLeads = []
 
-      setSubLeads(children || [])
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001'
+        const res = await fetch(`${apiUrl}/api/leads/sub-leads?lead_id=${leadId}`)
+        if (res.ok) {
+          const json = await res.json()
+          loadedSubLeads = json.subLeads || []
+        } else {
+          throw new Error('API request failed')
+        }
+      } catch {
+        const { data: rpcData, error: rpcError } = await supabase.rpc('get_sub_leads', { p_lead_id: leadId })
+        if (!rpcError && rpcData) {
+          loadedSubLeads = rpcData
+        } else {
+          const { data: children } = await supabase
+            .from('leads')
+            .select('*')
+            .eq('parent_lead_id', leadId)
+            .order('created_at', { ascending: false })
+          loadedSubLeads = children || []
+        }
+      }
+
+      setSubLeads(loadedSubLeads)
     } catch (error) {
       console.error('Error fetching lead:', error)
     } finally {

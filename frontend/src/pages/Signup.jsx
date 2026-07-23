@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Mail, Lock, Eye, EyeOff, User, Zap, AlertCircle, ArrowRight, RefreshCw, CheckCircle2 } from 'lucide-react'
 
 export default function Signup() {
-  const { signUpWithEmail } = useAuth()
+  const { signUpWithEmail, user } = useAuth()
   const navigate = useNavigate()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -15,6 +15,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
+  const [isWaitingForEmail, setIsWaitingForEmail] = useState(false)
 
   const handleSignup = async (e) => {
     e.preventDefault()
@@ -39,16 +40,20 @@ export default function Signup() {
     setLoading(true)
     try {
       await signUpWithEmail(email, password, fullName)
-      setSuccessMsg('Account created successfully! Redirecting...')
-      setTimeout(() => {
-        navigate('/dashboard')
-      }, 1500)
+      setSuccessMsg('Verification link sent to your email.')
+      setIsWaitingForEmail(true)
     } catch (err) {
       setError(err.message || 'Failed to create account')
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (user && isWaitingForEmail) {
+      navigate('/dashboard')
+    }
+  }, [user, isWaitingForEmail, navigate])
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-stretch font-sans antialiased text-slate-900 relative">
@@ -71,8 +76,8 @@ export default function Signup() {
         {/* Header/Logo */}
         <header className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-emerald-600/20 group-hover:bg-emerald-700 transition-colors">
-              <Zap className="w-6 h-6 text-white fill-white" />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-bold tracking-tight text-slate-900">
               easyCRM
@@ -111,6 +116,21 @@ export default function Signup() {
             </div>
           )}
 
+          {isWaitingForEmail ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center animate-fade-in">
+              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-6 shadow-sm border border-emerald-200 relative">
+                <div className="absolute inset-0 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin" />
+                <Mail className="w-8 h-8 text-emerald-600 relative z-10" />
+              </div>
+              <h2 className="text-xl font-bold text-slate-800 mb-2">Check your inbox</h2>
+              <p className="text-sm text-slate-500 max-w-[260px] mx-auto">
+                We've sent a confirmation link to <span className="font-semibold text-slate-700">{email}</span>.
+              </p>
+              <p className="text-xs text-slate-400 mt-6 bg-slate-50 py-2 px-4 rounded-lg border border-slate-100">
+                Waiting for you to click the link... This page will update automatically.
+              </p>
+            </div>
+          ) : (
           <form onSubmit={handleSignup} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
@@ -222,6 +242,7 @@ export default function Signup() {
               )}
             </button>
           </form>
+          )}
 
           {/* Desktop quick navigation hint */}
           <p className="hidden md:block text-center text-xs text-slate-400 mt-8">
@@ -251,8 +272,8 @@ export default function Signup() {
         
         {/* Brand Label */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-emerald-500/25 backdrop-blur-md rounded-lg flex items-center justify-center border border-emerald-500/30">
-            <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain drop-shadow-md" />
           </div>
           <span className="text-sm font-bold tracking-wider uppercase text-emerald-300">
             Professional Sales Suite

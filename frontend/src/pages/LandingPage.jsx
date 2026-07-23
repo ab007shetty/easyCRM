@@ -15,8 +15,8 @@ export default function LandingPage() {
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-emerald-600/20 group-hover:bg-emerald-700 transition-colors">
-              <Zap className="w-6 h-6 text-white fill-white" />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-bold tracking-tight text-slate-900">
               easyCRM
@@ -199,8 +199,8 @@ export default function LandingPage() {
       <footer className="py-12 bg-slate-900 text-slate-400 text-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-              <Zap className="w-5 h-5 text-slate-950 fill-slate-950" />
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img src="/logo.png" alt="easyCRM Logo" className="w-full h-full object-contain filter grayscale" />
             </div>
             <span className="text-white font-bold text-lg">easyCRM</span>
             <span>&copy; {new Date().getFullYear()} All rights reserved.</span>
