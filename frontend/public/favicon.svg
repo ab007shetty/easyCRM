@@ -1,4 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="#10b981"/>
-  <path d="M8 16l5 5 11-11" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="bgGrad32" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="url(#bgGrad32)"/>
+  
+  <circle cx="9" cy="10" r="1.5" fill="#a7f3d0" />
+  <circle cx="23" cy="10" r="1.5" fill="#a7f3d0" />
+  <circle cx="9" cy="22" r="1.5" fill="#a7f3d0" />
+  <circle cx="23" cy="22" r="1.5" fill="#a7f3d0" />
+  <path d="M9 10h14v12H9z" stroke="#a7f3d0" stroke-width="0.75" stroke-dasharray="1.5 1.5" opacity="0.5" fill="none"/>
+  
+  <path d="M18 6l-7 11h5.5l-2.5 9 7-11h-5.5L18 6z" fill="#ffffff"/>
 </svg>

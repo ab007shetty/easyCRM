@@ -37,35 +37,24 @@ Follow these steps to get easyCRM running locally and deploy to Vercel.
 
 ---
 
-## Step 3: Enable Authentication Providers
+## Step 3: Enable & Configure Email Authentication
 
-### Email/Password (enabled by default)
-1. Go to **Authentication → Providers**
-2. Ensure **Email** is enabled
-3. Optionally disable "Confirm email" for easier local testing
+### Enable Email Provider
+1. In your Supabase Dashboard, navigate to **Authentication → Providers → Email**
+2. Ensure **Email Provider** is toggled **ON**
+3. Ensure **Confirm email** is:
+   - **OFF** (Disabled) for easier local development (this allows users to register and sign in immediately without verifying their email address)
+   - **ON** (Enabled) for production deployments
 
-### Google OAuth
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create a new project (or use existing)
-3. Navigate to **APIs & Services → OAuth consent screen**
-   - Choose **External**
-   - Fill in app name, support email
-   - Add `supabase.co` to authorized domains
-4. Go to **APIs & Services → Credentials**
-   - Click **Create Credentials → OAuth client ID**
-   - Application type: **Web application**
-   - Authorized JavaScript origins: `http://localhost:5173` (dev), `https://your-app.vercel.app` (prod)
-   - Authorized redirect URIs: Copy from Supabase Dashboard → **Authentication → Providers → Google** (looks like `https://YOUR_PROJECT_ID.supabase.co/auth/v1/callback`)
-5. Copy the **Client ID** and **Client Secret**
-6. In Supabase Dashboard → **Authentication → Providers → Google**:
-   - Enable Google
-   - Paste Client ID and Client Secret
-   - Save
+### Configure Password Recovery Email Template
+1. Go to **Authentication → Email Templates**
+2. Select the **Reset Password** template
+3. Keep the redirect setup in mind. When a user clicks the password reset link, they will be redirected to the site's URL with the recovery tokens appended. Our app is set up to handle recovery automatically via the `/reset-password` route.
 
 ### Configure Redirect URLs
-1. In Supabase Dashboard → **Authentication → URL Configuration**
-2. Set **Site URL**: `http://localhost:5173` (update to prod URL later)
-3. Add **Redirect URLs**:
+1. In your Supabase Dashboard, navigate to **Authentication → URL Configuration**
+2. Set **Site URL**: `http://localhost:5173` (Update to your custom domain or frontend Vercel URL in production)
+3. Add the redirect paths to the **Redirect URLs** list:
    - `http://localhost:5173/**`
    - `https://your-app.vercel.app/**`
 
@@ -143,8 +132,8 @@ Backend runs at `http://localhost:3000`
 
 ### Post-Deployment
 1. Update Supabase **Site URL** to your frontend Vercel URL
-2. Add your Vercel URLs to Google OAuth authorized origins & redirect URIs
-3. Update `VITE_APP_URL` in frontend environment variables
+2. Update `VITE_APP_URL` in frontend environment variables
+3. Add your production URL to the **Redirect URLs** list in Supabase URL Configuration (e.g. `https://your-app.vercel.app/**`)
 
 ---
 
@@ -152,7 +141,7 @@ Backend runs at `http://localhost:3000`
 
 | Issue | Solution |
 |-------|---------|
-| Google login redirects to wrong URL | Check redirect URIs in Google Console and Supabase URL Configuration |
+| Password reset link redirects to localhost | Ensure **Site URL** and **Redirect URLs** in Supabase are updated to your production deployment URL |
 | "Invalid API key" error | Verify `.env` files have correct Supabase keys |
 | Database tables missing | Re-run the SQL migration in Supabase SQL Editor |
 | QR code not generating | Ensure `VITE_APP_URL` is set correctly |

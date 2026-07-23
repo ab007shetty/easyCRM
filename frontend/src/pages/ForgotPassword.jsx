@@ -1,25 +1,30 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
-import { Mail, Lock, Eye, EyeOff, Zap, AlertCircle, ArrowRight, RefreshCw, CheckCircle2 } from 'lucide-react'
+import { supabase } from '../lib/supabase'
+import { Mail, Zap, AlertCircle, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react'
 
-export default function Login() {
-  const { signInWithEmail } = useAuth()
+export default function ForgotPassword() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
 
-  const handleEmailLogin = async (e) => {
+  const handleResetRequest = async (e) => {
     e.preventDefault()
     setError('')
+    setSuccessMsg('')
     setLoading(true)
+
     try {
-      await signInWithEmail(email, password)
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      })
+      if (error) throw error
+      setSuccessMsg('Password reset link has been sent to your email address.')
+      setEmail('')
     } catch (err) {
-      setError(err.message || 'Failed to sign in')
+      setError(err.message || 'Failed to send reset link')
     } finally {
       setLoading(false)
     }
@@ -28,19 +33,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-stretch font-sans antialiased text-slate-900 relative">
       
-      {/* Central Switch Button (Floating on Desktop divider) */}
-      <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-20">
-        <button
-          type="button"
-          onClick={() => navigate('/signup')}
-          title="Switch to Sign Up"
-          className="w-12 h-12 bg-white hover:bg-emerald-50 text-emerald-600 hover:text-emerald-700 border border-slate-200 hover:border-emerald-200 rounded-full flex items-center justify-center cursor-pointer shadow-lg shadow-slate-200/80 hover:scale-105 active:scale-95 transition-all group"
-        >
-          <RefreshCw className="w-5 h-5 transition-transform duration-500 group-hover:rotate-180" />
-        </button>
-      </div>
-
-      {/* Left Column: Sign-In Form */}
+      {/* Left Column: Form */}
       <div className="w-full md:w-1/2 flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-24 bg-white z-10">
         
         {/* Header/Logo */}
@@ -53,22 +46,23 @@ export default function Login() {
               easyCRM
             </span>
           </Link>
-          <div className="flex md:hidden items-center gap-2 text-sm text-slate-600">
-            <span>New here?</span>
-            <Link to="/signup" className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors">
-              Sign Up
-            </Link>
-          </div>
+          <Link
+            to="/login"
+            className="flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Login</span>
+          </Link>
         </header>
 
         {/* Form Container */}
         <div className="my-auto max-w-md w-full mx-auto py-8">
           <div className="mb-8">
             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              Sign In
+              Reset Password
             </h1>
             <p className="text-sm text-slate-500 mt-2">
-              Welcome back! Please sign in to manage your lead network.
+              Enter your email and we will send you a link to reset your password.
             </p>
           </div>
 
@@ -79,7 +73,14 @@ export default function Login() {
             </div>
           )}
 
-          <form onSubmit={handleEmailLogin} className="space-y-5">
+          {successMsg && (
+            <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-3 text-sm text-emerald-700 animate-fade-in">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="flex-1">{successMsg}</div>
+            </div>
+          )}
+
+          <form onSubmit={handleResetRequest} className="space-y-5">
             <div>
               <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
                 Email Address
@@ -98,39 +99,6 @@ export default function Login() {
               </div>
             </div>
 
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                  Password
-                </label>
-                <Link
-                  to="/forgot-password"
-                  className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-              <div className="relative flex items-center">
-                <Lock className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  style={{ paddingLeft: '3rem', paddingRight: '3rem' }}
-                  className="w-full h-12 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 p-1 text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-
             <button
               type="submit"
               disabled={loading}
@@ -139,29 +107,16 @@ export default function Login() {
               {loading ? (
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Signing in...</span>
+                  <span>Sending Link...</span>
                 </div>
               ) : (
                 <>
-                  <span>Sign In</span>
+                  <span>Send Reset Link</span>
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
             </button>
           </form>
-
-          {/* Desktop quick navigation hint */}
-          <p className="hidden md:block text-center text-xs text-slate-400 mt-8">
-            Click the center floating button to switch to <strong className="text-slate-600 font-semibold">Sign Up</strong>.
-          </p>
-
-          {/* Mobile navigation toggle */}
-          <div className="flex md:hidden flex-col items-center gap-2 text-center text-sm text-slate-500 mt-8 border-t border-slate-100 pt-6">
-            <span>Don&apos;t have an account?</span>
-            <Link to="/signup" className="w-full py-2.5 border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-all">
-              Create an Account
-            </Link>
-          </div>
         </div>
 
         {/* Footer */}
@@ -172,57 +127,48 @@ export default function Login() {
 
       {/* Right Column: Professional Green marketing panel */}
       <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-emerald-800 to-emerald-950 p-12 lg:p-24 flex-col justify-between text-white relative overflow-hidden">
-        {/* Decorative Background Elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-700/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-600/15 rounded-full blur-3xl -ml-20 -mb-20 pointer-events-none" />
         
-        {/* Brand Label */}
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-emerald-500/25 backdrop-blur-md rounded-lg flex items-center justify-center border border-emerald-500/30">
             <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
           </div>
           <span className="text-sm font-bold tracking-wider uppercase text-emerald-300">
-            Professional Sales Suite
+            Security & Support
           </span>
         </div>
 
-        {/* Value Proposition */}
         <div className="my-auto max-w-md">
           <h2 className="text-4xl font-extrabold tracking-tight leading-tight mb-6">
-            Grow and Track Your Network Seamlessly
+            Recover Your Password Securely
           </h2>
           <p className="text-emerald-100/80 mb-8 text-base leading-relaxed">
-            easyCRM provides multi-level referral hierarchy tools and real-time capture forms to make managing business networks intuitive and simple.
+            easyCRM integrates with Supabase Authentication to guarantee secure token-based link recovery. Enter your registered email address and follow the link inside the message.
           </p>
 
-          {/* Features Checklist */}
           <ul className="space-y-4">
             <li className="flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-              <span className="text-emerald-50 text-sm font-semibold">Multi-level referral chain visualization</span>
+              <span className="text-emerald-50 text-sm font-semibold">Encrypted email links</span>
             </li>
             <li className="flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-              <span className="text-emerald-50 text-sm font-semibold">Instant lead collection via unique QR Codes</span>
+              <span className="text-emerald-50 text-sm font-semibold">One-time token validation</span>
             </li>
             <li className="flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-              <span className="text-emerald-50 text-sm font-semibold">Detailed interaction logs and status trackers</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-              <span className="text-emerald-50 text-sm font-semibold">Fast, secure and password-protected portal</span>
+              <span className="text-emerald-50 text-sm font-semibold">Direct account recovery</span>
             </li>
           </ul>
         </div>
 
-        {/* Subtitle/Quote */}
         <div className="border-t border-emerald-700/50 pt-8 flex flex-col gap-2">
           <p className="text-xs text-emerald-200/60 font-semibold uppercase tracking-wider">
-            Trust & Security Guaranteed
+            Need help?
           </p>
           <p className="text-xs text-emerald-100/70">
-            Powered by Supabase secure PostgreSQL storage and standard cryptography.
+            Contact your company administrator if you have lost access to your corporate email.
           </p>
         </div>
       </div>

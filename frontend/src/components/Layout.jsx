@@ -5,7 +5,7 @@ import { Menu, Bell } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 const pageTitles = {
-  '/': 'Dashboard',
+  '/dashboard': 'Dashboard',
   '/leads': 'Lead Management',
   '/network': 'Network View',
   '/profile': 'Profile',
