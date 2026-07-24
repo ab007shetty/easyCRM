@@ -194,7 +194,7 @@ export default function Profile() {
           </p>
 
           {profile?.referral_code ? (
-            <QRCodeDisplay referralCode={profile.referral_code} size={180} />
+            <QRCodeDisplay referralCode={profile.referral_code} userFullName={profile.full_name} userEmail={profile.email} size={180} />
           ) : (
             <div className="text-center py-8">
               <Share2 className="w-10 h-10 text-slate-300 mx-auto mb-2" />
