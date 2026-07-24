@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation, Link } from 'react-router-dom'
 import Sidebar from './Sidebar'
-import { Menu, Bell } from 'lucide-react'
+import { Menu, Bell, Settings } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 const pageTitles = {
@@ -45,9 +45,13 @@ export default function Layout() {
               <Bell className="w-5 h-5 text-slate-500" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full" />
             </button>
-            <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold ml-1">
-              {profile?.full_name?.charAt(0)?.toUpperCase() || '?'}
-            </div>
+            <Link
+              to="/settings"
+              className="p-2 hover:bg-slate-100 rounded-lg transition-colors ml-1 text-slate-500 hover:text-slate-700"
+              title="Settings"
+            >
+              <Settings className="w-5 h-5" />
+            </Link>
           </div>
         </header>
 

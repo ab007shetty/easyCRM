@@ -17,7 +17,6 @@ const navItems = [
   { path: '/leads', label: 'Leads', icon: Users },
   { path: '/network', label: 'Network', icon: Network },
   { path: '/profile', label: 'Profile', icon: UserCircle },
-  { path: '/settings', label: 'Settings', icon: Settings },
 ]
 
 export default function Sidebar({ isOpen, onClose }) {
