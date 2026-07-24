@@ -63,7 +63,7 @@ export default function LandingPage() {
       <nav className="sticky top-0 z-50 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src="./public/logo.png" alt="logo" className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-extrabold text-sm" />
+            <img src="/logo.png" alt="logo" className="w-8 h-8 rounded-lg" />
             <span className="text-lg font-bold tracking-tight text-slate-900">easyCRM</span>
           </Link>
 
