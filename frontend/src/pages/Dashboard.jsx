@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import StatsCard from '../components/StatsCard'
 import LeadCard from '../components/LeadCard'
+import QRCardPreviewModal from '../components/QRCardPreviewModal'
 import {
   Users, UserPlus, Network, TrendingUp, QrCode,
   ArrowRight, Plus, Share2
@@ -15,6 +16,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null)
   const [recentLeads, setRecentLeads] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showQRModal, setShowQRModal] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -55,6 +57,7 @@ export default function Dashboard() {
   }
 
   return (
+    <>
     <div className="space-y-6 animate-fade-in">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl p-6 text-white relative overflow-hidden">
@@ -69,7 +72,7 @@ export default function Dashboard() {
           </p>
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => navigate('/profile')}
+              onClick={() => setShowQRModal(true)}
               className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-sm font-medium hover:bg-white/30 transition-colors"
             >
               <QrCode className="w-4 h-4" />
@@ -179,5 +182,15 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+
+    {showQRModal && profile?.referral_code && (
+      <QRCardPreviewModal
+        referralCode={profile.referral_code}
+        userFullName={profile.full_name}
+        userEmail={profile.email}
+        onClose={() => setShowQRModal(false)}
+      />
+    )}
+  </>
   )
 }

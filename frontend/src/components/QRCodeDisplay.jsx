@@ -1,9 +1,11 @@
 import { QRCodeSVG } from 'qrcode.react'
-import { Download, Copy, Check } from 'lucide-react'
+import { Download, Copy, Check, Eye } from 'lucide-react'
 import { useState, useRef } from 'react'
+import QRCardPreviewModal from './QRCardPreviewModal'
 
 export default function QRCodeDisplay({ referralCode, userFullName, userEmail, size = 200 }) {
   const [copied, setCopied] = useState(false)
+  const [showModal, setShowModal] = useState(false)
   const qrRef = useRef(null)
 
   const appUrl = import.meta.env.VITE_APP_URL || window.location.origin
@@ -204,13 +206,29 @@ export default function QRCodeDisplay({ referralCode, userFullName, userEmail, s
       {/* Actions */}
       <div className="flex gap-2">
         <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors text-sm font-medium shadow-sm cursor-pointer"
+        >
+          <Eye className="w-4 h-4" />
+          View
+        </button>
+        <button
           onClick={handleDownload}
           className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-sm font-medium shadow-sm cursor-pointer"
         >
           <Download className="w-4 h-4" />
-          Download QR
+          Download
         </button>
       </div>
+
+      {showModal && (
+        <QRCardPreviewModal
+          referralCode={referralCode}
+          userFullName={userFullName}
+          userEmail={userEmail}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   )
 }

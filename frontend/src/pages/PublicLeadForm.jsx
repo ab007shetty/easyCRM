@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import {
   User, Mail, Phone, Building2, Zap,
-  CheckCircle, AlertCircle, Loader2
+  CheckCircle, AlertCircle, Loader2, FileText
 } from 'lucide-react'
 
 export default function PublicLeadForm() {
@@ -15,7 +15,7 @@ export default function PublicLeadForm() {
   const [error, setError] = useState('')
   const [notFound, setNotFound] = useState(false)
   const [formData, setFormData] = useState({
-    full_name: '', email: '', phone: '', company: '',
+    full_name: '', email: '', phone: '', company: '', notes: '',
   })
 
   useEffect(() => {
@@ -59,6 +59,7 @@ export default function PublicLeadForm() {
           email: formData.email || null,
           phone: formData.phone || null,
           company: formData.company || null,
+          notes: formData.notes || null,
         }),
       })
 
@@ -87,6 +88,7 @@ export default function PublicLeadForm() {
           email: formData.email || null,
           phone: formData.phone || null,
           company: formData.company || null,
+          notes: formData.notes || null,
           source: 'qr_scan',
           status: 'new',
           generation: 1,
@@ -252,6 +254,22 @@ export default function PublicLeadForm() {
                   placeholder="Company name"
                   required
                   className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                Notes
+              </label>
+              <div className="relative">
+                <FileText className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
+                <textarea
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  placeholder="Any additional notes or message..."
+                  rows={3}
+                  className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all resize-none"
                 />
               </div>
             </div>

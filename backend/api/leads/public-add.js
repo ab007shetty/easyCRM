@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { referral_code, full_name, email, phone, company } = req.body
+  const { referral_code, full_name, email, phone, company, notes } = req.body
 
   if (!referral_code || !full_name) {
     return res.status(400).json({ error: 'Referral code and full name are required' })
@@ -36,6 +36,7 @@ export default async function handler(req, res) {
         email: email || null,
         phone: phone || null,
         company: company || null,
+        notes: notes || null,
         source: 'qr_scan',
         status: 'new',
         generation: 1

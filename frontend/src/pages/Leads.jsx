@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LeadCard from '../components/LeadCard'
@@ -172,9 +173,9 @@ export default function Leads() {
       )}
 
       {/* Add Lead Modal */}
-      {showAddForm && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl animate-scale-in">
+      {showAddForm && createPortal(
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl animate-scale-in my-8">
             <div className="flex items-center justify-between p-5 border-b border-slate-100">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -294,7 +295,8 @@ export default function Leads() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )
